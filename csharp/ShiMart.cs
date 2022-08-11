@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http.Headers;
 
 namespace csharp
 {
@@ -18,45 +19,43 @@ namespace csharp
                 {
                     Items[i].SellIn = Items[i].SellIn - 1;
                 }
-
-                if (Items[i].Name == "Aged Brie")
-                {
-                    if (Items[i].Quality < 50)
-                    {
-                        Items[i].Quality = Items[i].Quality + 1;
-                    }
-                }
-                else
-                {
-                    if (Items[i].Quality > 0)
-                    {
-                        if (Items[i].Name != "Canned Beans")
-                        {
-                            Items[i].Quality = Items[i].Quality - 1;
-                        }
-                    }
-                }
+                
+                SetQuality(Items[i]);
 
                 if (Items[i].SellIn < 0)
                 {
-                    if (Items[i].Name == "Aged Brie")
-                    {
-                        if (Items[i].Quality < 50)
-                        {
-                            Items[i].Quality = Items[i].Quality + 1;
-                        }
-                    }
-                    else
-                    {
-                        if (Items[i].Quality > 0)
-                        {
-                            if (Items[i].Name != "Canned Beans")
-                            {
-                                Items[i].Quality = Items[i].Quality - 1;
-                            }
-                        }
-                    }
+                    SetQuality(Items[i]);
                 }
+            }
+        }
+
+        private void SetQuality(Item item)
+        {
+            switch (item.Name)
+            {
+                case "Canned Beans":
+                {
+                    return;
+                }
+                case "Aged Brie":
+                {
+                    item.Quality += 1;
+                    if (item.Quality > 50) item.Quality = 50;
+                    break;
+                }
+                case "Baked Sourdough Bread":
+                {
+                    item.Quality -= 2;
+                    if (item.Quality < 0) item.Quality = 0;
+                    break;
+                }
+                default:
+                {
+                    item.Quality -= 1;
+                    if (item.Quality < 0) item.Quality = 0;
+                    break;
+                }
+
             }
         }
     }
